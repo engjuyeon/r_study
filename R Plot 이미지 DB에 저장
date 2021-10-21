@@ -1,0 +1,17 @@
+
+
+
+png(plot <- tempfile(fileext = "png"))
+par(mfrow=c(1,1))
+corrplot(cor(data), method='shade', addCoef.col="black",addshade="all")
+dev.off()
+
+install.packages("RCurl")
+library(RCurl)
+plot_binary <- base64Encode(readBin(plot, "raw", file.info(plot)[1, "size"]), "txt")
+
+rs <- dbSendQuery(con,
+                  paste("INSERT INTO TABLE명
+                  (열이름)
+                  VALUES
+                  ('",plot_binary,"')", sep=""))
